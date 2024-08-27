@@ -17,6 +17,7 @@ import LoadingIcon from '@/assets/icons/three-dots.svg'
 import BotIcon from '@/assets/icons/bot.svg'
 import { getISOLang } from '@/locale'
 import { Path } from '@/utils/constants'
+import { getCSSVar } from '@/utils/utils'
 
 import('@/utils/polyfill')
 
@@ -38,36 +39,35 @@ const Chat = dynamic(async () => (await import('../chat/chat.page')).ChatPage, {
 })
 
 export function useSwitchTheme() {
-  // const config = useAppConfig()
+  useEffect(() => {
+    document.body.classList.remove('light')
+    document.body.classList.remove('dark')
+    const config = { theme: 'light' }
 
-  // useEffect(() => {
-  //   document.body.classList.remove('light')
-  //   document.body.classList.remove('dark')
+    if (config.theme === 'dark') {
+      document.body.classList.add('dark')
+    }
+    else if (config.theme === 'light') {
+      document.body.classList.add('light')
+    }
 
-  // if (config.theme === 'dark') {
-  //   document.body.classList.add('dark')
-  // }
-  // else if (config.theme === 'light') {
-  //   document.body.classList.add('light')
-  // }
+    const metaDescriptionDark = document.querySelector(
+      'meta[name="theme-color"][media*="dark"]',
+    )
+    const metaDescriptionLight = document.querySelector(
+      'meta[name="theme-color"][media*="light"]',
+    )
 
-  // const metaDescriptionDark = document.querySelector(
-  //   'meta[name="theme-color"][media*="dark"]',
-  // )
-  // const metaDescriptionLight = document.querySelector(
-  //   'meta[name="theme-color"][media*="light"]',
-  // )
-
-  // if (config.theme === 'auto') {
-  //   metaDescriptionDark?.setAttribute('content', '#151515')
-  //   metaDescriptionLight?.setAttribute('content', '#fafafa')
-  // }
-  // else {
-  //   const themeColor = getCSSVar('--theme-color')
-  //   metaDescriptionDark?.setAttribute('content', themeColor)
-  //   metaDescriptionLight?.setAttribute('content', themeColor)
-  // }
-  // }, [config.theme])
+    if (config.theme === 'auto') {
+      metaDescriptionDark?.setAttribute('content', '#151515')
+      metaDescriptionLight?.setAttribute('content', '#fafafa')
+    }
+    else {
+      const themeColor = getCSSVar('--theme-color')
+      metaDescriptionDark?.setAttribute('content', themeColor)
+      metaDescriptionLight?.setAttribute('content', themeColor)
+    }
+  }, [])
 }
 
 function useHtmlLang() {
