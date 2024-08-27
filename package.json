@@ -13,6 +13,7 @@
     "@hello-pangea/dnd": "^16.5.0",
     "@next/third-parties": "^14.1.0",
     "@svgr/webpack": "^6.5.1",
+    "@unocss/webpack": "^0.62.3",
     "emoji-picker-react": "^4.9.2",
     "mermaid": "^10.6.1",
     "nanoid": "^5.0.3",
@@ -28,6 +29,7 @@
     "remark-math": "^5.1.1",
     "sass": "^1.59.2",
     "spark-md5": "^3.0.2",
+    "unocss": "^0.62.3",
     "use-debounce": "^9.0.4",
     "zustand": "^4.5.5"
   },
@@ -39,7 +41,6 @@
     "eslint": "^9",
     "lint-staged": "^13.2.2",
     "postcss": "^8",
-    "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }
 }

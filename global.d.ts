@@ -27,4 +27,5 @@ declare interface Window {
       sendNotification: (options: string | Options) => void
     }
   }
+  _SW_ENABLED?: boolean
 }

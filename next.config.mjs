@@ -1,3 +1,5 @@
+import * as UnoCSS from '@unocss/webpack'
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   webpack(config) {
@@ -9,6 +11,8 @@ const nextConfig = {
     config.resolve.fallback = {
       child_process: false,
     }
+    // for unocss
+    config.plugins.push(UnoCSS.default())
 
     return config
   },

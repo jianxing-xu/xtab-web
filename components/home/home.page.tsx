@@ -91,14 +91,6 @@ function useHasHydrated() {
   return hasHydrated
 }
 
-export function WindowContent(props: { children: React.ReactNode }) {
-  return (
-    <div className={styles['window-content']}>
-      {props?.children}
-    </div>
-  )
-}
-
 function Screen() {
   const location = useLocation()
   const isHome = location.pathname === Path.Home
@@ -110,12 +102,12 @@ function Screen() {
     return (
       <>
         <SideBar className={isHome ? styles['sidebar-show'] : ''} />
-        <WindowContent>
+        <div className={styles['window-content']}>
           <Routes>
             <Route path={Path.Home} element={<Chat />} />
             <Route path={Path.Settings} element={<Settings />} />
           </Routes>
-        </WindowContent>
+        </div>
       </>
     )
   }

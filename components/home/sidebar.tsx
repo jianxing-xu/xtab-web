@@ -1,13 +1,10 @@
 import React, { Fragment, useEffect, useMemo, useRef } from 'react'
-import { Link } from 'react-router-dom'
-import { IconButton } from '../ui-lib/button'
 import styles from './home.module.scss'
-import SettingsIcon from '@/assets/icons/settings.svg'
 import ChatGptIcon from '@/assets/icons/chatgpt.svg'
-import DragIcon from '@/assets/icons/drag.svg'
-import { Path } from '@/utils/constants'
+import AddIcon from '@/assets/icons/add.svg'
 import { isIOS, useMobileScreen } from '@/utils/utils'
 
+// hooks
 export function useHotKey() {
   const chatStore = { nextSession(_: number) {
   } }
@@ -64,6 +61,8 @@ export function useDragSideBar() {
     onDragStart,
   }
 }
+
+// comps
 export function SideBarContainer(props: {
   children: React.ReactNode
   onDragStart: (e: MouseEvent) => void
@@ -75,7 +74,7 @@ export function SideBarContainer(props: {
     () => isIOS() && isMobileScreen,
     [isMobileScreen],
   )
-  const { children, className, onDragStart, shouldNarrow } = props
+  const { children, className, shouldNarrow } = props
   return (
     <div
       className={`${styles.sidebar} ${className} ${
@@ -87,12 +86,6 @@ export function SideBarContainer(props: {
       }}
     >
       {children}
-      <div
-        className={styles['sidebar-drag']}
-        onPointerDown={e => onDragStart(e as any)}
-      >
-        <DragIcon />
-      </div>
     </div>
   )
 }
@@ -103,17 +96,13 @@ export function SideBarHeader(props: {
   logo?: React.ReactNode
   children?: React.ReactNode
 }) {
-  const { title, subTitle, logo, children } = props
+  const { logo } = props
   return (
     <Fragment>
-      <div className={styles['sidebar-header']} data-tauri-drag-region>
-        <div className={styles['sidebar-title']} data-tauri-drag-region>
-          {title}
-        </div>
-        <div className={styles['sidebar-sub-title']}>{subTitle}</div>
-        <div className={`${styles['sidebar-logo']} no-dark`}>{logo}</div>
+      <div className="flex items-center gap-3" data-tauri-drag-region>
+        <div className="no-dark">{logo}</div>
+        <div className="text-5">Chat GPT</div>
       </div>
-      {children}
     </Fragment>
   )
 }
@@ -143,7 +132,16 @@ export function SideBarTail(props: {
     </div>
   )
 }
+export function SideMenuItem(props: { icon: React.ReactNode, text: string }) {
+  return (
+    <div className="flex items-center">
+      <div className="mr-4">{props.icon}</div>
+      <div>{props.text}</div>
+    </div>
+  )
+}
 
+// final
 export function SideBar(props: { className?: string }) {
   useHotKey()
   const { onDragStart } = useDragSideBar()
@@ -154,27 +152,11 @@ export function SideBar(props: { className?: string }) {
       shouldNarrow={false}
       {...props}
     >
-      <SideBarHeader
-        title="NextChat"
-        subTitle="Build your own AI assistant."
-        logo={<ChatGptIcon />}
-      >
-        SideHeader
-      </SideBarHeader>
+      <SideBarHeader title="NextChat" logo={<ChatGptIcon size="20px" />} />
       <SideBarBody>
-        SideBody
+        <SideMenuItem icon={<AddIcon />} text="新对话" />
       </SideBarBody>
-      <SideBarTail
-        primaryAction={(
-          <>
-            <div className={styles['sidebar-action']}>
-              <Link to={Path.Settings}>
-                <IconButton icon={<SettingsIcon />} shadow />
-              </Link>
-            </div>
-          </>
-        )}
-      />
+      <SideBarTail />
     </SideBarContainer>
   )
 }

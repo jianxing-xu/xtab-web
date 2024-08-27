@@ -1,5 +1,3 @@
-import { CACHE_URL_PREFIX, UPLOAD_URL } from "@/app/constant";
-import { RequestMessage } from "@/app/client/api";
 
 export function compressImage(file: Blob, maxSize: number): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -59,48 +57,6 @@ export function compressImage(file: Blob, maxSize: number): Promise<string> {
   });
 }
 
-export async function preProcessImageContent(
-  content: RequestMessage["content"],
-) {
-  if (typeof content === "string") {
-    return content;
-  }
-  const result = [];
-  for (const part of content) {
-    if (part?.type == "image_url" && part?.image_url?.url) {
-      try {
-        const url = await cacheImageToBase64Image(part?.image_url?.url);
-        result.push({ type: part.type, image_url: { url } });
-      } catch (error) {
-        console.error("Error processing image URL:", error);
-      }
-    } else {
-      result.push({ ...part });
-    }
-  }
-  return result;
-}
-
-const imageCaches: Record<string, string> = {};
-export function cacheImageToBase64Image(imageUrl: string) {
-  if (imageUrl.includes(CACHE_URL_PREFIX)) {
-    if (!imageCaches[imageUrl]) {
-      const reader = new FileReader();
-      return fetch(imageUrl, {
-        method: "GET",
-        mode: "cors",
-        credentials: "include",
-      })
-        .then((res) => res.blob())
-        .then(
-          async (blob) =>
-            (imageCaches[imageUrl] = await compressImage(blob, 256 * 1024)),
-        ); // compressImage
-    }
-    return Promise.resolve(imageCaches[imageUrl]);
-  }
-  return Promise.resolve(imageUrl);
-}
 
 export function base64Image2Blob(base64Data: string, contentType: string) {
   const byteCharacters = atob(base64Data);
@@ -119,20 +75,8 @@ export function uploadImage(file: Blob): Promise<string> {
   }
   const body = new FormData();
   body.append("file", file);
-  return fetch(UPLOAD_URL, {
-    method: "post",
-    body,
-    mode: "cors",
-    credentials: "include",
-  })
-    .then((res) => res.json())
-    .then((res) => {
-      console.log("res", res);
-      if (res?.code == 0 && res?.data) {
-        return res?.data;
-      }
-      throw Error(`upload Error: ${res?.msg}`);
-    });
+  // do upload image
+  return Promise.resolve('xxx');
 }
 
 export function removeImage(imageUrl: string) {
